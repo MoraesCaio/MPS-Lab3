@@ -1,8 +1,9 @@
 package infra;
 
-import Utils.InfraException;
+import utils.InfraException;
 import business.model.User;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RegisterManager implements Persistent
@@ -11,7 +12,7 @@ public class RegisterManager implements Persistent
     {
         try
         {
-            FileOutputStream fos = new FileOutputStream("Register.bin");
+            FileOutputStream fos = new FileOutputStream("infra/Register.bin");
             ObjectOutputStream out = new ObjectOutputStream(fos);
             out.writeObject(users);
         }
@@ -26,10 +27,13 @@ public class RegisterManager implements Persistent
         List<User> users;
         try
         {
-            FileInputStream fis = new FileInputStream("Register.bin");
+            FileInputStream fis = new FileInputStream("infra/Register.bin");
             ObjectInputStream in = new ObjectInputStream(fis);
-            users = (List)in.readObject();
+            users = (ArrayList<User>) in.readObject();
             return users;
+        }
+        catch(EOFException eofEx) {
+            return new ArrayList<User>();
         }
         catch (IOException | ClassNotFoundException e)
         {

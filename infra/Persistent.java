@@ -1,6 +1,6 @@
 package infra;
 
-import Utils.InfraException;
+import utils.InfraException;
 import business.model.User;
 import java.util.List;
 
