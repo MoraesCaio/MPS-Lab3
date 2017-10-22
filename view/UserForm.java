@@ -54,7 +54,7 @@ public class UserForm
         if (senha == null) return;
 
         try {
-            new UserManager().add(new User(login, senha));
+            new UserManager(new Binario()).add(new User(login, senha));
             JOptionPane.showMessageDialog(null, "Sucesso!");
         } catch (LoginException | PassException | InfraException lpiEx) {
             JOptionPane.showMessageDialog(null, lpiEx.getMessage());
@@ -69,7 +69,7 @@ public class UserForm
 
         try {
 
-            if(new UserManager().del(login)) JOptionPane.showMessageDialog(null, "Sucesso!");
+            if(new UserManager(new Binario()).del(login)) JOptionPane.showMessageDialog(null, "Sucesso!");
             else JOptionPane.showMessageDialog(null, "Usuário não encontrado");
 
         } catch (InfraException iEx) {
@@ -79,7 +79,7 @@ public class UserForm
 
     private void listForm() {
         try {
-            JOptionPane.showMessageDialog(null, new UserManager().listAll());
+            JOptionPane.showMessageDialog(null, new UserManager(new Binario()).listAll());
         } catch (InfraException iEx) {
             JOptionPane.showMessageDialog(null, iEx.getMessage());
         }
