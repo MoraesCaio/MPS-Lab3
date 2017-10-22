@@ -1,9 +1,12 @@
 package business.control;
 
-import Utils.LoginException;
-import Utils.PassException;
+import utils.InfraException;
+import utils.LoginException;
+import utils.PassException;
 import business.model.User;
-import java.util.ArrayList;
+import infra.RegisterManager;
+
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -13,18 +16,12 @@ public class UserManager
 {
     private List<User> users;
 
-    public UserManager(List users)
-    {
-        this.users = users;
+    public UserManager() throws InfraException {
+        users = new RegisterManager().load();
     }
 
-    public UserManager()
-    {
-        this(new ArrayList());
-    }
+    public void add(User user) throws LoginException, PassException, InfraException {
 
-    public void add(User user) throws LoginException, PassException
-    {
         if (user.getLogin().length() > 12)
             throw new LoginException("Login deve ter, no máximo, 12 caracteres.");
         if (user.getLogin().isEmpty() || user.getLogin().length() == 0)
@@ -40,20 +37,40 @@ public class UserManager
                 user.getPassword().matches(".*\\d.*") &&
                 countDigits(user.getPassword()) >= 2))
             throw new PassException("Senha deve possuir letras e pelo menos dois números.");
+
         users.add(user);
+        new RegisterManager().save(users);
     }
 
-    public void del(User user)
-    {
-        users.remove(user);
+    public boolean del(String login) throws InfraException {
+
+        boolean isDelete = false;
+        Iterator<User> iter = users.iterator();
+
+        while (iter.hasNext()) {
+            User user = iter.next();
+
+            if (user.getLogin().equals(login)) {
+                iter.remove();
+                isDelete = true;
+            }
+        }
+
+        if(isDelete)new RegisterManager().save(users);
+
+        return isDelete;
     }
 
-    public void listAll()
+    public String listAll()
     {
+        StringBuilder list = new StringBuilder();
+
         for (User user : users)
         {
-            System.out.println(user);
+            list.append(user).append("\n");
         }
+
+        return list.toString();
     }
 
     public List<User> getUsers()
