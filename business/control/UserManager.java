@@ -26,7 +26,7 @@ public class UserManager
     public void add(User user) throws LoginException, PassException
     {
         if (user.getLogin().length() > 12)
-            throw new LoginException("Login deve ter, no máximo, 12 caracteres.".);
+            throw new LoginException("Login deve ter, no máximo, 12 caracteres.");
         if (user.getLogin().isEmpty() || user.getLogin().length() == 0)
             throw new LoginException("Login não pode ser vazio.");
         if (user.getLogin().matches(".*\\d.*"))

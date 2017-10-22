@@ -11,9 +11,6 @@ public class Main
     public static void main(String[] args)
     {
         UserForm userForm = new UserForm();
-        UserManager userManager = new UserManager();
-        RegisterManager registerManager = new RegisterManager();
-
         userForm.menu();
     }
 }
