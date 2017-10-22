@@ -1,12 +1,23 @@
 package business.model;
 
+import java.io.Serializable;
+
 /**
  * Created by caiomoraes on 19/10/17.
  */
-public class User
+public class User implements Serializable
 {
     private String login;
     private String password;
+
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
+    public User() {
+        this("Nome", "Senha");
+    }
 
     public String getLogin()
     {
