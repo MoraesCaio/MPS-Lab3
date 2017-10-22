@@ -4,7 +4,7 @@ import utils.InfraException;
 import utils.LoginException;
 import utils.PassException;
 import business.model.User;
-import infra.RegisterManager;
+import infra.Binario;
 
 import java.util.Iterator;
 import java.util.List;
@@ -15,9 +15,11 @@ import java.util.List;
 public class UserManager
 {
     private List<User> users;
+    Persistent registros;
 
-    public UserManager() throws InfraException {
-        users = new RegisterManager().load();
+    public UserManager(Persistent regType) throws InfraException {
+    	registros = regType;
+        users = registros.load();
     }
 
     public void add(User user) throws LoginException, PassException, InfraException {
@@ -39,7 +41,7 @@ public class UserManager
             throw new PassException("Senha deve possuir letras e pelo menos dois números.");
 
         users.add(user);
-        new RegisterManager().save(users);
+        registros.save(users);
     }
 
     public boolean del(String login) throws InfraException {
@@ -56,7 +58,7 @@ public class UserManager
             }
         }
 
-        if(isDelete)new RegisterManager().save(users);
+        if(isDelete)registros.save(users);
 
         return isDelete;
     }
