@@ -3,7 +3,12 @@ package business.control;
 import business.model.User;
 import infra.Persistent;
 import infra.RegisterManager;
+import static utils.StringChecker.*;
 import utils.InfraException;
+import utils.LoginException;
+import utils.PasswordException;
+import utils.StringChecker;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,8 +39,10 @@ public class UserManager
         this(new RegisterManager());
     }
 
-    public void add(User user) throws InfraException
+    public void add(User user) throws InfraException, LoginException, PasswordException
     {
+    	checkLogin(user.getLogin());
+    	checkPassword(user.getPassword());
         users.add(user);
         registers.save(users);
     }

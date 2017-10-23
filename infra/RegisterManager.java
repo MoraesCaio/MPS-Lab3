@@ -9,7 +9,7 @@ import java.util.List;
 public class RegisterManager implements Persistent
 {
     private String registerFile;
-    private static final String defaultRegisterFile = "src/infra/Register.bin";
+    private static final String defaultRegisterFile = "Register.bin";
 
     public RegisterManager(String registerFile)
     {
