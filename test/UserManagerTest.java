@@ -273,22 +273,3 @@ class UserManagerTest {
 	}
 
 }
-
-
-/*
- * @BeforeEach
-void setUp()
-{
-ArrayList<User> testUsers = new ArrayList<User>();
-testUsers.add(new User("abcdefgh", "abcdef12")); //OK
-//login
-testUsers.add(new User("abcdefghabcde", "abcdef12")); //max 12 chars
-testUsers.add(new User("", "abcdef12")); //empty login
-testUsers.add(new User("abcdefgh1", "abcdef12")); //login number
-//password
-testUsers.add(new User("abcdefgh", "abcdef12abcdef12abcdef12")); //max 20 chars
-testUsers.add(new User("abcdefgh", "abcd12")); //min 8 chars
-testUsers.add(new User("abcdefgh", "12345678")); //no letters
-testUsers.add(new User("abcdefgh", "abcdefgh")); //no numbers
-testUsers.add(new User("abcdefgh", "abcdefg1")); //does not have 2 digits
- */
