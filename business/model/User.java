@@ -10,12 +10,14 @@ public class User implements Serializable
     private String login;
     private String password;
 
-    public User(String login, String password) {
+    public User(String login, String password)
+    {
         this.login = login;
         this.password = password;
     }
 
-    public User() {
+    public User()
+    {
         this("Nome", "Senha");
     }
 

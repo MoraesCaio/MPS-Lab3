@@ -6,7 +6,6 @@ import utils.InfraException;
 import utils.LoginException;
 import utils.PassException;
 import business.model.User;
-import infra.Binario;
 
 import java.util.Iterator;
 import java.util.List;

@@ -23,7 +23,8 @@ public class RegisterManager implements Persistent
         }
     }
 
-    public List<User> load() throws InfraException{
+    public List<User> load() throws InfraException
+    {
         List<User> users;
         try
         {
@@ -32,7 +33,8 @@ public class RegisterManager implements Persistent
             users = (ArrayList<User>) in.readObject();
             return users;
         }
-        catch(EOFException eofEx) {
+        catch(EOFException eofEx)
+        {
             return new ArrayList<User>();
         }
         catch (IOException | ClassNotFoundException e)
