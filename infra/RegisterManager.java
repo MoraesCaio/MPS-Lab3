@@ -8,32 +8,50 @@ import java.util.List;
 
 public class RegisterManager implements Persistent
 {
+    private String registerFile;
+    private static final String defaultRegisterFile = "src/infra/Register.bin";
+
+    public RegisterManager(String registerFile)
+    {
+        this.registerFile = registerFile;
+    }
+
+    public RegisterManager()
+    {
+        this(defaultRegisterFile);
+    }
+
     public void save(List<User> users) throws InfraException
     {
         try
         {
-            FileOutputStream fos = new FileOutputStream("infra/Register.bin");
+            FileOutputStream fos = new FileOutputStream(registerFile);
             ObjectOutputStream out = new ObjectOutputStream(fos);
             out.writeObject(users);
         }
         catch (IOException e)
         {
-            e.printStackTrace();
             throw new InfraException("Erro ao salvar lista de usuários.");
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<User> load() throws InfraException
     {
-        List<User> users;
+        List<User> users = new ArrayList<>();
         try
         {
-            FileInputStream fis = new FileInputStream("infra/Register.bin");
+            FileInputStream fis = new FileInputStream(registerFile);
             ObjectInputStream in = new ObjectInputStream(fis);
-            users = (ArrayList<User>) in.readObject();
+
+            if (in.readObject() instanceof ArrayList)
+            {
+                users = (ArrayList<User>) in.readObject();
+            }
             return users;
         }
-        catch(EOFException eofEx)
+        //Empty file
+        catch (EOFException eofEx)
         {
             return new ArrayList<User>();
         }
@@ -42,6 +60,7 @@ public class RegisterManager implements Persistent
             e.printStackTrace();
             throw new InfraException("Erro ao carregar lista de usuários.");
         }
+
     }
 
 }

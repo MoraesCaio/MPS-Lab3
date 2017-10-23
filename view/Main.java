@@ -1,8 +1,5 @@
 package view;
 
-import business.control.UserManager;
-import infra.RegisterManager;
-
 /**
  * Created by caiomoraes on 19/10/17.
  */
