@@ -1,5 +1,7 @@
 package business.control;
 
+import infra.Persistent;
+import infra.RegisterManager;
 import utils.InfraException;
 import utils.LoginException;
 import utils.PassException;
@@ -15,14 +17,21 @@ import java.util.List;
 public class UserManager
 {
     private List<User> users;
-    Persistent registros;
+    private Persistent registers;
 
-    public UserManager(Persistent regType) throws InfraException {
-    	registros = regType;
-        users = registros.load();
+    public UserManager(Persistent registers) throws InfraException
+    {
+    	this.registers = registers;
+        users = registers.load();
     }
 
-    public void add(User user) throws LoginException, PassException, InfraException {
+    public UserManager() throws InfraException
+    {
+        this(new RegisterManager());
+    }
+
+    public void add(User user) throws LoginException, PassException, InfraException
+    {
 
         if (user.getLogin().length() > 12)
             throw new LoginException("Login deve ter, no máximo, 12 caracteres.");
@@ -41,24 +50,27 @@ public class UserManager
             throw new PassException("Senha deve possuir letras e pelo menos dois números.");
 
         users.add(user);
-        registros.save(users);
+        registers.save(users);
     }
 
-    public boolean del(String login) throws InfraException {
+    public boolean del(String login) throws InfraException
+    {
 
         boolean isDelete = false;
         Iterator<User> iter = users.iterator();
 
-        while (iter.hasNext()) {
+        while (iter.hasNext())
+        {
             User user = iter.next();
 
-            if (user.getLogin().equals(login)) {
+            if (user.getLogin().equals(login))
+            {
                 iter.remove();
                 isDelete = true;
             }
         }
 
-        if(isDelete)registros.save(users);
+        if(isDelete)registers.save(users);
 
         return isDelete;
     }
@@ -83,8 +95,10 @@ public class UserManager
     public int countDigits(String s)
     {
         int count = 0;
-        for (int i = 0, len = s.length(); i < len; i++) {
-            if (Character.isDigit(s.charAt(i))) {
+        for (int i = 0, len = s.length(); i < len; i++)
+        {
+            if (Character.isDigit(s.charAt(i)))
+            {
                 count++;
             }
         }

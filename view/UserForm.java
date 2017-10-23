@@ -22,13 +22,13 @@ public class UserForm
                          "2 - Remover Usuário<br>" +
                          "3 - Listar Usuários<html>";
 
-        while(true) {
+        while(true)
+        {
             result = JOptionPane.showInputDialog(message);
-            if (result == null) {
-                break;
-            }
+            if (result == null) break;
 
-            switch (result) {
+            switch (result)
+            {
                 case "1":
                     addForm();
                     break;
@@ -44,7 +44,8 @@ public class UserForm
         }
     }
 
-    private void addForm() {
+    private void addForm()
+    {
         String login = JOptionPane.showInputDialog("Usuário:");
 
         if (login == null) return;
@@ -53,34 +54,42 @@ public class UserForm
 
         if (senha == null) return;
 
-        try {
-            new UserManager(new Binario()).add(new User(login, senha));
+        try
+        {
+            new UserManager().add(new User(login, senha));
             JOptionPane.showMessageDialog(null, "Sucesso!");
-        } catch (LoginException | PassException | InfraException lpiEx) {
+        } catch (LoginException | PassException | InfraException lpiEx)
+        {
             JOptionPane.showMessageDialog(null, lpiEx.getMessage());
         }
     }
 
-    private void removeForm() {
+    private void removeForm()
+    {
 
         String login = JOptionPane.showInputDialog("Usuário:");
 
         if (login == null) return;
 
-        try {
+        try
+        {
 
-            if(new UserManager(new Binario()).del(login)) JOptionPane.showMessageDialog(null, "Sucesso!");
+            if(new UserManager().del(login)) JOptionPane.showMessageDialog(null, "Sucesso!");
             else JOptionPane.showMessageDialog(null, "Usuário não encontrado");
 
-        } catch (InfraException iEx) {
+        } catch (InfraException iEx)
+        {
             JOptionPane.showMessageDialog(null, iEx.getMessage());
         }
     }
 
-    private void listForm() {
-        try {
-            JOptionPane.showMessageDialog(null, new UserManager(new Binario()).listAll());
-        } catch (InfraException iEx) {
+    private void listForm()
+    {
+        try
+        {
+            JOptionPane.showMessageDialog(null, new UserManager().listAll());
+        } catch (InfraException iEx)
+        {
             JOptionPane.showMessageDialog(null, iEx.getMessage());
         }
     }
