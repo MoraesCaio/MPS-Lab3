@@ -1,10 +1,13 @@
 package view;
 
+import infra.RegisterManager;
 import utils.InfraException;
 import utils.LoginException;
-import utils.PassException;
+import utils.PasswordException;
 import business.control.UserManager;
 import business.model.User;
+import utils.StringChecker;
+
 import javax.swing.*;
 
 /**
@@ -12,25 +15,48 @@ import javax.swing.*;
  */
 public class UserForm
 {
+    private UserManager userManager;
+
+    public UserForm()
+    {
+        try
+        {
+            this.userManager = new UserManager(new RegisterManager());
+        }
+        catch (InfraException e)
+        {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+    }
 
     public void menu()
     {
 
         String result;
         String message = "<html>Escolha uma opção:<br><br>" +
-                         "1 - Adicionar Usuário<br>" +
-                         "2 - Remover Usuário<br>" +
-                         "3 - Listar Usuários<html>";
+                "1 - Adicionar Usuário<br>" +
+                "2 - Remover Usuário<br>" +
+                "3 - Listar Usuários<html>";
 
-        while(true)
+        while (true)
         {
             result = JOptionPane.showInputDialog(message);
-            if (result == null) break;
+            if (result == null)
+            {
+                break;
+            }
 
             switch (result)
             {
                 case "1":
-                    addForm();
+                    try
+                    {
+                        addForm();
+                    }
+                    catch (LoginException | PasswordException e)
+                    {
+                        JOptionPane.showMessageDialog(null, e.getMessage());
+                    }
                     break;
                 case "2":
                     removeForm();
@@ -44,23 +70,32 @@ public class UserForm
         }
     }
 
-    private void addForm()
+    private void addForm() throws LoginException, PasswordException
     {
         String login = JOptionPane.showInputDialog("Usuário:");
+        //User pressed cancel button
+        if (login == null)
+        {
+            return;
+        }
+        StringChecker.checkLogin(login);
 
-        if (login == null) return;
-
-        String senha = JOptionPane.showInputDialog("Senha:");
-
-        if (senha == null) return;
+        String password = JOptionPane.showInputDialog("Senha:");
+        //User pressed cancel button
+        if (password == null)
+        {
+            return;
+        }
+        StringChecker.checkPassword(password);
 
         try
         {
-            new UserManager().add(new User(login, senha));
-            JOptionPane.showMessageDialog(null, "Sucesso!");
-        } catch (LoginException | PassException | InfraException lpiEx)
+            userManager.add(new User(login, password));
+            JOptionPane.showMessageDialog(null, "Usuário adicionado com sucesso!");
+        }
+        catch (InfraException iEx)
         {
-            JOptionPane.showMessageDialog(null, lpiEx.getMessage());
+            JOptionPane.showMessageDialog(null, iEx.getMessage());
         }
     }
 
@@ -68,16 +103,24 @@ public class UserForm
     {
 
         String login = JOptionPane.showInputDialog("Usuário:");
-
-        if (login == null) return;
+        //User pressed cancel button
+        if (login == null)
+        {
+            return;
+        }
 
         try
         {
-
-            if(new UserManager().del(login)) JOptionPane.showMessageDialog(null, "Sucesso!");
-            else JOptionPane.showMessageDialog(null, "Usuário não encontrado");
-
-        } catch (InfraException iEx)
+            if (userManager.del(login))
+            {
+                JOptionPane.showMessageDialog(null, "Usuário removido com sucesso!");
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(null, "Usuário não encontrado");
+            }
+        }
+        catch (InfraException iEx)
         {
             JOptionPane.showMessageDialog(null, iEx.getMessage());
         }
@@ -85,12 +128,6 @@ public class UserForm
 
     private void listForm()
     {
-        try
-        {
-            JOptionPane.showMessageDialog(null, new UserManager().listAll());
-        } catch (InfraException iEx)
-        {
-            JOptionPane.showMessageDialog(null, iEx.getMessage());
-        }
+        JOptionPane.showMessageDialog(null, userManager.listAll());
     }
 }

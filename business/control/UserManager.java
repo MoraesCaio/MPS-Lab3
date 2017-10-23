@@ -1,13 +1,10 @@
 package business.control;
 
+import business.model.User;
 import infra.Persistent;
 import infra.RegisterManager;
 import utils.InfraException;
-import utils.LoginException;
-import utils.PassException;
-import business.model.User;
-
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,8 +17,16 @@ public class UserManager
 
     public UserManager(Persistent registers) throws InfraException
     {
-    	this.registers = registers;
-        users = registers.load();
+        this.registers = registers;
+        try
+        {
+            users = registers.load();
+        }
+        catch (InfraException iEx)
+        {
+            registers.save(new ArrayList<User>());
+            users = registers.load();
+        }
     }
 
     public UserManager() throws InfraException
@@ -29,51 +34,39 @@ public class UserManager
         this(new RegisterManager());
     }
 
-    public void add(User user) throws LoginException, PassException, InfraException
+    public void add(User user) throws InfraException
     {
-
-        if (user.getLogin().length() > 12)
-            throw new LoginException("Login deve ter, no máximo, 12 caracteres.");
-        if (user.getLogin().isEmpty() || user.getLogin().length() == 0)
-            throw new LoginException("Login não pode ser vazio.");
-        if (user.getLogin().matches(".*\\d.*"))
-            throw new LoginException("Login não pode conter números.");
-
-        if (user.getPassword().length() > 20)
-            throw new PassException("Senha deve ter no máximo 20 caracteres.");
-        if (user.getPassword().length() < 8)
-            throw new PassException("Senha deve ter no mínimo 8 caracteres.");
-        if (!(user.getPassword().matches(".*[a-zA-Z]+.*") &&
-                user.getPassword().matches(".*\\d.*") &&
-                countDigits(user.getPassword()) >= 2))
-            throw new PassException("Senha deve possuir letras e pelo menos dois números.");
-
         users.add(user);
         registers.save(users);
     }
 
+
+    /**
+     * Deletes user whose login has been informed
+     * @param login String login of the user.
+     * @return
+     * @throws InfraException
+     */
     public boolean del(String login) throws InfraException
     {
-
-        boolean isDelete = false;
-        Iterator<User> iter = users.iterator();
-
-        while (iter.hasNext())
+        boolean hasDeletedUser = false;
+        for (User user : users)
         {
-            User user = iter.next();
-
             if (user.getLogin().equals(login))
             {
-                iter.remove();
-                isDelete = true;
+                users.remove(user);
+                registers.save(users);
+                hasDeletedUser = true;
+                break;
             }
         }
-
-        if(isDelete)registers.save(users);
-
-        return isDelete;
+        return hasDeletedUser;
     }
 
+    /**
+     * Lists all users.
+     * @return String containing all users.
+     */
     public String listAll()
     {
         StringBuilder list = new StringBuilder();
@@ -89,18 +82,5 @@ public class UserManager
     public List<User> getUsers()
     {
         return users;
-    }
-
-    public int countDigits(String s)
-    {
-        int count = 0;
-        for (int i = 0, len = s.length(); i < len; i++)
-        {
-            if (Character.isDigit(s.charAt(i)))
-            {
-                count++;
-            }
-        }
-        return count;
     }
 }
