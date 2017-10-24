@@ -1,5 +1,7 @@
 package business.model;
 
+import com.sun.org.apache.xpath.internal.operations.Equals;
+
 import java.io.Serializable;
 
 /**
@@ -46,5 +48,20 @@ public class User implements Serializable
     {
         return "Login: " + login +
                 "\nPassword: " + password + "\n";
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (obj instanceof User)
+        {
+            User otherUser = (User) obj;
+            if (login.equals(otherUser.getLogin()) &&
+                    password.equals((otherUser.getPassword())))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

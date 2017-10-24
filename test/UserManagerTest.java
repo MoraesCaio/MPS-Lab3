@@ -1,275 +1,332 @@
 package test;
 
 import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
-
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import business.control.UserManager;
 import business.model.User;
 import infra.RegisterManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import utils.InfraException;
 import utils.LoginException;
 import utils.PasswordException;
 
-class UserManagerTest {
-	private UserManager userManager;
+class UserManagerTest
+{
+    private UserManager userManager;
 
-	@BeforeEach
-	void setUp() throws Exception {
-		userManager = new UserManager(new RegisterManager());
-		
-	}
+    @BeforeEach
+    void setUp() throws Exception
+    {
+        userManager = new UserManager(new RegisterManager());
 
-	//Login user
-	
-	@Test
-	void testAdd()
-	{
-		// as expected
-		User expected;
-		
-		String login = "abcd";
-		String password = "abcdef12";
-		
-		expected = new User(login,password);
-		
-		try {
-			userManager.add(new User(login, password));
-			assertTrue(isSaved(expected));
-		
-		} catch (InfraException | LoginException | PasswordException e) {
-			fail("O teste falhou, est· lanÁando uma exceÁ„o!");
-			e.printStackTrace();
-		}
-		
-		
-	}
+    }
 
-	@Test
-	void testAddMax12Login(){ 
-		//max 12
-		
-		String login = "abcdefghijklm";
-		String password = "abcdef12";
-		
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof LoginException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-	}
-	
-	@Test
-	void testAddEmpty() { 
-		//empty login
-		
-		String login = "";
-		String password = "abcdef12";
+    @Test
+    void testAdd()
+    {
+        User expected;
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof LoginException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
+        String login = "abcd";
+        String password = "abcdef12";
 
-	}
-	
-	@Test
-	void testAddNumber() {
-		//login number
+        expected = new User(login, password);
 
-		String login = "abcd1";
-		String password = "abcdef12";
+        try
+        {
+            userManager.add(new User(login, password));
+        }
+        catch (InfraException | LoginException | PasswordException e)
+        {
+            fail("O teste falhou, est√° lan√ßando uma exce√ß√£o!");
+        }
+    }
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof LoginException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-		
-	}
-	
 
-	//login password
-	
-	
-	@Test
-	void testAddMax20Pw() {
-		// max 20
-		
-		String login = "abcde";
-		String password = "abcdefghijklmnopq1234567890";
+    @Test
+    void testAddLoginMax12()
+    {
+        String login = "abcdefghijklm";
+        String password = "abcdef12";
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof PasswordException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-	}
-	
-	@Test
-	void testAddMin8() {
-		// min 8
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof LoginException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+    }
 
-		String login = "abcde";
-		String password = "abcd12";
+    @Test
+    void testAddLoginEmpty()
+    {
+        String login = "";
+        String password = "abcdef12";
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof PasswordException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-		
-	}
-	
-	
-	@Test
-	void testAddLettersPw() {
-		// no letters
-		
-		String login = "abcde";
-		String password = "1234567890";
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof LoginException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof PasswordException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-	}
-	
-	@Test
-	void testAddNoNumber() {
-		// no numbers
+    }
 
-		String login = "abcde";
-		String password = "abcdefghijklmnopq";
+    @Test
+    void testAddLoginNumber()
+    {
+        String login = "abcd1";
+        String password = "abcdef12";
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof PasswordException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-		
-	}
-	
-	@Test
-	void testAddTwoDigits() {
-		// does not have 2 digits
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof LoginException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
 
-		String login = "abcde";
-		String password = "abcdefg1";
+    }
 
-		try{
-			userManager.add(new User(login, password));
-			fail("O teste falhou, devria lanÁar uma exceÁ„o!");
-		
-		} catch(LoginException | InfraException | PasswordException e) {
-			
-			if(e instanceof PasswordException)
-			{
-				// successful test !
-				assertTrue(true);
-			}else {fail("O teste falhou, est· lanÁando a axcess„o errada !");}
-			
-		}
-		
-	}
-	
-	@Test
-	void testDel() {
-		fail("Not yet implemented");
-	}
 
-	@Test
-	void testListAll() {
-		fail("Not yet implemented");
-	}
+    //password
+    @Test
+    void testAddPasswordMax20()
+    {
+        String login = "abcde";
+        String password = "abcdefghijklmnopq1234567890";
 
-	@Test
-	void testGetUsers() {
-		fail("Not yet implemented");
-	}
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof PasswordException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+    }
 
-	// helpers
-	
-	private boolean isSaved(User usr) throws InfraException
-	{
-		
-		List<User> users = userManager.getUsers();
-		
+    @Test
+    void testAddPasswordMin8()
+    {
+        String login = "abcde";
+        String password = "abcd12";
 
-		Iterator<User> usersAsIterator = users.iterator();
-	    
-		
-		while (usersAsIterator.hasNext())
-	    {
-	           User it = usersAsIterator.next();
-	           
-	           if(it.getLogin().equals(usr.getLogin()) && it.getPassword().equals(usr.getPassword()))return true;
-	           
-	    }
-	    return false;
-	    
-	}
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof PasswordException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+
+    }
+
+
+    @Test
+    void testAddPasswordLetters()
+    {
+        String login = "abcde";
+        String password = "1234567890";
+
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof PasswordException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+    }
+
+    @Test
+    void testAddPasswordNoNumbers()
+    {
+        String login = "abcde";
+        String password = "abcdefghijklmnopq";
+
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof PasswordException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+
+    }
+
+    @Test
+    void testAddTwoDigits()
+    {
+        String login = "abcde";
+        String password = "abcdefg1";
+
+        try
+        {
+            userManager.add(new User(login, password));
+            fail("O teste falhou, deveria lan√ßar uma exce√ß√£o!");
+        }
+        catch (LoginException | InfraException | PasswordException e)
+        {
+            if (e instanceof PasswordException)
+            {
+                // successful test !
+                assertTrue(true);
+            }
+            else
+            {
+                fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+            }
+        }
+
+    }
+
+    @Test
+    void testDel()
+    {
+        try
+        {
+            userManager.add(new User("aaaaaaaa", "aaa11aaa"));
+            userManager.add(new User("bbbbbbbb", "bbb22bbb"));
+            userManager.del("bbbbbbbb");
+        }
+        catch (InfraException | LoginException | PasswordException e)
+        {
+            fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+        }
+
+        ArrayList<User> users = new ArrayList<User>();
+        users.add(new User("aaaaaaaa", "aaa11aaa"));
+
+        assertEquals(userManager.getUsers(), users);
+    }
+
+    @Test
+    void testListAll()
+    {
+        try
+        {
+            userManager.add(new User("aaaaaaaa", "aaa11aaa"));
+            userManager.add(new User("bbbbbbbb", "bbb22bbb"));
+            assertEquals("Login: aaaaaaaa\nPassword: aaa11aaa\n" +
+                    "\nLogin: bbbbbbbb\nPassword: bbb22bbb\n\n", userManager.listAll());
+        }
+        catch (PasswordException | LoginException | InfraException e)
+        {
+            fail("O teste falhou, est√° lan√ßando a exce√ß√£o errada !");
+        }
+    }
+
+    @Test
+    void testGetUsers()
+    {
+        try
+        {
+            userManager.add(new User("aaaaaaaa", "aaa11aaa"));
+            userManager.add(new User("bbbbbbbb", "bbb22bbb"));
+            userManager.add(new User("cccccccc", "ccc33ccc"));
+
+            ArrayList<User> users = new ArrayList<User>();
+            users.add(new User("aaaaaaaa", "aaa11aaa"));
+            users.add(new User("bbbbbbbb", "bbb22bbb"));
+            users.add(new User("cccccccc", "ccc33ccc"));
+
+            assertEquals(users, userManager.getUsers());
+        }
+        catch (InfraException | LoginException | PasswordException e)
+        {
+            fail("O teste falhou, est√° lan√ßando uma exce√ß√£o!");
+        }
+
+    }
+
+    // helpers
+
+    private boolean isSaved(User usr) throws InfraException
+    {
+
+        List<User> users = userManager.getUsers();
+
+        for (User user : users)
+        {
+            if (user.getLogin().equals(usr.getLogin()) && user.getPassword().equals(usr.getPassword()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
 }
