@@ -1,8 +1,5 @@
 package test;
 
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.ArrayList;
-import java.util.List;
 import business.control.UserManager;
 import business.model.User;
 import infra.RegisterManager;
@@ -11,6 +8,10 @@ import org.junit.jupiter.api.Test;
 import utils.InfraException;
 import utils.LoginException;
 import utils.PasswordException;
+
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class UserManagerTest
 {

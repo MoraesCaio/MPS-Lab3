@@ -1,7 +1,4 @@
 package business.model;
-
-import com.sun.org.apache.xpath.internal.operations.Equals;
-
 import java.io.Serializable;
 
 /**
