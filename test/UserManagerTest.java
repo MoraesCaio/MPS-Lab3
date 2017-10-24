@@ -272,7 +272,21 @@ class UserManagerTest
         ArrayList<User> users = new ArrayList<User>();
         users.add(new User("aaaaaaaa", "aaa11aaa"));
 
-        assertEquals(userManager.getUsers(), users);
+        assertEquals(users, userManager.getUsers());
+    }
+
+    @Test
+    void testDelNonExistentUser()
+    {
+        try
+        {
+            userManager.add(new User("aaaaaaaa", "aaa11aaa"));
+            assertEquals(false, userManager.del("bbbbbbbb"));
+        }
+        catch (InfraException | LoginException | PasswordException e)
+        {
+            fail("O teste falhou, está lançando a exceção errada !");
+        }
     }
 
     @Test
@@ -313,23 +327,4 @@ class UserManagerTest
         }
 
     }
-
-    // helpers
-
-    private boolean isSaved(User usr) throws InfraException
-    {
-
-        List<User> users = userManager.getUsers();
-
-        for (User user : users)
-        {
-            if (user.getLogin().equals(usr.getLogin()) && user.getPassword().equals(usr.getPassword()))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
 }
