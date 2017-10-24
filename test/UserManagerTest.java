@@ -259,7 +259,10 @@ class UserManagerTest
         {
             userManager.add(new User("aaaaaaaa", "aaa11aaa"));
             userManager.add(new User("bbbbbbbb", "bbb22bbb"));
-            userManager.del("bbbbbbbb");
+            if (!userManager.del("bbbbbbbb"))
+            {
+                fail("O teste falhou ao remover usuário");
+            }
         }
         catch (InfraException | LoginException | PasswordException e)
         {
